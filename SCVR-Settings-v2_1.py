@@ -95,11 +95,9 @@ def update_data():
     # Get the selected headset, resolution, width, and height
     selected_headset = headset_var.get()
     selected_resolution = resolution_var.get()
-    
-    
-    # Check if the resolution is in the correct format
-    resolution_match = re.findall(r'(\d+) X (\d+)', selected_resolution)
-    if resolution_match:
+
+
+    if resolution_match := re.findall(r'(\d+) X (\d+)', selected_resolution):
         width, height = map(int, resolution_match[0])
     else:
         # Handle the case where the resolution format is incorrect
@@ -138,7 +136,7 @@ def update_data():
 
     # Fetch FOV and clamp it to a maximum of 120
     fov_value = min(fov_var.get(), 120)
-    
+
     # Update attributes and capture the messages
     result_attributes = [
         update_attributes(live_attributes_directory, width, height, fov_value),
@@ -153,7 +151,7 @@ def update_data():
     hosts_updated = is_hosts_updated()
 
     # Check if any settings were successfully updated
-    updated = any(result for result in result_settings)
+    updated = any(result_settings)
 
     result_message = f"{result_settings_message}\n\n{result_attributes_message}"
 
@@ -234,8 +232,7 @@ resolution_menu.pack(padx=10, pady=10, anchor="c")
 
 # Update FOV and resolutions based on the selected headset
 def update_headset_data(fov_var, *args):
-    selected_headset = headset_var.get()
-    if selected_headset:
+    if selected_headset := headset_var.get():
         # Fetch FOV and clamp it to a maximum of 120
         fov_value = min(headset_data[selected_headset].get("SC Attributes FOV", 0), 120)
         fov_var.set(fov_value)
